@@ -1,0 +1,128 @@
+
+DEFAULT_MIN_LENGTH = 4
+DEFAULT_MAX_LENGTH = 50
+
+entity Publisher {
+  name String required unique maxlength(100)
+}
+
+entity Author {
+  firstName String required maxlength(DEFAULT_MAX_LENGTH)
+  lastName String required maxlength(DEFAULT_MAX_LENGTH)
+}
+
+entity Client {
+  firstName String required maxlength(DEFAULT_MAX_LENGTH)
+  lastName String  required maxlength(DEFAULT_MAX_LENGTH)
+  email String unique maxlength(DEFAULT_MAX_LENGTH)
+  address String maxlength(DEFAULT_MAX_LENGTH)
+  phone String maxlength(20)
+}
+
+entity Book{
+  isbn String required unique minlength(5) maxlength(13)
+  name String required maxlength(100)
+  publishYear String required minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH)
+  copies Integer required
+  cover ImageBlob
+}
+
+entity BorrowedBook{
+  borrowDate LocalDate
+}
+
+entity Blog {
+  name String required minlength(3)
+  handle String required minlength(2)
+}
+
+entity Post {
+  title String required
+  content TextBlob required
+  date Instant required
+}
+
+entity Tag {
+  name String required minlength(2)
+}
+
+enum CategoryStatus {
+    AVAILABLE, RESTRICTED, DISABLED
+}
+
+entity Category {
+    description String required,
+    sortOrder Integer,
+    dateAdded LocalDate,
+    dateModified LocalDate,
+    status CategoryStatus
+}
+
+entity Product {
+    title String required,
+    keywords String,
+    description String,
+    rating Integer,
+    dateAdded LocalDate,
+    dateModified LocalDate
+}
+
+entity Customer {
+	firstName String,
+    lastName String,
+    email String,
+    telephone String
+}
+
+entity Address {
+    address1 String,
+    address2 String,
+    city String,
+    postcode String required maxlength(10),
+    country String required maxlength(2)
+}
+
+entity WishList {
+	title String required,
+    restricted Boolean
+}
+
+relationship OneToMany {
+    Customer{wishList(title)} to WishList{customer},
+    WishList{product(title)} to Product{wishList},
+    Customer{address} to Address{customer}
+}
+
+relationship ManyToOne {
+	Category{parent} to Category
+}
+
+relationship ManyToMany {
+	Category{product(title)} to Product{category}
+}
+
+relationship ManyToOne {
+  Blog{user(login)} to User
+  Post{blog(name)} to Blog
+}
+
+relationship ManyToMany {
+  Post{tag(name)} to Tag{entry}
+}
+
+relationship OneToOne {
+  Book{publisher(name)} to Publisher
+  BorrowedBook{book(name)} to Book
+  BorrowedBook{Client(email)} to Client
+}
+
+relationship ManyToMany {
+  Book{author(firstName)} to Author{book}
+}
+
+filter Book, Client, Author, BorrowedBook, Publisher, Blog, Post, Tag, Customer, Product, Category, Address, WishList 
+
+paginate Book, Client, Author, BorrowedBook, Publisher, Blog, Post, Tag, Customer, Product, Category, Address, WishList with pagination
+
+dto all with mapstruct
+service all with serviceClass
