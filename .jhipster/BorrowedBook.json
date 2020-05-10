@@ -1,0 +1,39 @@
+{
+    "name": "BorrowedBook",
+    "fields": [
+        {
+            "fieldName": "borrowDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "book",
+            "otherEntityRelationshipName": "borrowedBook",
+            "relationshipName": "book",
+            "otherEntityField": "name",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "client",
+            "otherEntityRelationshipName": "borrowedBook",
+            "relationshipName": "client",
+            "otherEntityField": "email",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20200510160100",
+    "entityTableName": "borrowed_book",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "jhlibrarynocache",
+    "applications": "*",
+    "microserviceName": "jhlibrarynocache"
+}
